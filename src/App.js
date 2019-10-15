@@ -1,17 +1,15 @@
 import React from 'react';
 import Table from "./components/Table";
-import { ListItem, List, ListItemText, IconButton, Typography } from "@material-ui/core";
+import { ListItem, List, ListItemText } from "@material-ui/core";
 import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
 import FoodItem from "./components/FoodItem";
 import { connect } from "react-redux";
-import Button from '@material-ui/core/Button';
-import Popover from '@material-ui/core/Popover';
-import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
+
 class App extends React.Component {
   render() {
-    var tables = this.props.tables;
-    var items = this.props.items;
+    let tables = this.props.tables;
+    let items = this.props.items;
     const food_items = Object.entries(items).map(([item, price]) => (
       <ListItem id={item}>
         <ListItemText><FoodItem name={item} price={price} dragItem={this.props.dragItem} /></ListItemText>
@@ -28,6 +26,8 @@ class App extends React.Component {
             orders={table_info.orders}
             items={this.props.items}
             dropItem={this.props.dropItem}
+            modifyOrder={this.props.modifyOrder}
+            deleteOrder={this.props.deleteOrder}
           />
         </ListItemText>
       </ListItem>
@@ -59,6 +59,12 @@ const mapDispatchToProps = (dispatch) => {
     },
     dropItem: (table_no) => {
       dispatch({ type: "dropItem", table_no });
+    },
+    modifyOrder: (table_no, item, no_of_items) => {
+      dispatch({ type: "modifyOrder", table_no, item, no_of_items });
+    },
+    deleteOrder: (table_no, item) => {
+      dispatch({ type: "deleteOrder", table_no, item });
     }
   };
 };

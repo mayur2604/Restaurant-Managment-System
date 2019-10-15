@@ -17,28 +17,76 @@ export default (state = {
     action) => {
     switch (action.type) {
         case "addOrder": break;
-        case "deleteOrder": break;
-        case "modifyOrder": break;
-        case "addItem": break;
-        case "modifyItem": break;
-        case "deleteItem": break;
-        case "dragItem":
+        case "deleteOrder": {
+            const table_no = action.table_no;
+            let res;
+            Object.entries(state.tables).map(([index, val]) => {
+                if (index === table_no) res = val
+            }
+            );
+            let amt = res.amt;
+            let no_of_items = res.no_of_items;
+            let orders = res.orders;
+            let temp = 0;
+            const item = action.item;
+            const price = state.items[item];
+            Object.entries(orders).map(([order, no]) => {
+                if (order === item) {
+                    temp = no;
+                    delete orders[item];
+                }
+
+            });
+            amt = Number(amt) - Number(temp) * Number(price);
+            no_of_items = Number(no_of_items) - Number(temp);
+            const tables = { ...state.tables, [table_no]: { amt, no_of_items, orders } }
+            state = { ...state, tables }
+            break;
+        }
+        case "modifyOrder": {
+            const table_no = action.table_no;
+            let res;
+            Object.entries(state.tables).map(([index, val]) => {
+                if (index === table_no) res = val
+            }
+            );
+            let amt = 0;
+            let no_of_items = 0;
+            let orders = res.orders;
+            const modified_no_of_items = action.no_of_items;
+            const item = action.item;
+            Object.entries(orders).map(([order, no]) => {
+                if (order === item) {
+                    orders[item] = modified_no_of_items;
+                }
+                amt = Number(amt) + Number(state.items[order]) * Number(orders[order]);
+                no_of_items = Number(no_of_items) + Number(orders[order]);
+            });
+            const tables = { ...state.tables, [table_no]: { amt, no_of_items, orders } }
+            state = { ...state, tables }
+            break;
+        }
+        case "addItem": { break; }
+        case "modifyItem": { break; }
+        case "deleteItem": { break; }
+        case "dragItem": {
             state = { ...state, dragged_item: action.val };
             break;
-        case "dropItem":
+        }
+        case "dropItem": {
             const table_no = action.table_no;
-            var res;
+            let res;
             Object.entries(state.tables).map(([index, val]) => {
                 if (index === table_no) res = val
             }
             );
             const item = state.dragged_item;
             const price = state.items[item];
-            var amt = Number(res.amt) + Number(price);
+            let amt = Number(res.amt) + Number(price);
             amt = Number(amt);
             const no_of_items = res.no_of_items + 1;
-            var orders = res.orders;
-            var flag = 0;
+            let orders = res.orders;
+            let flag = 0;
             Object.entries(orders).map(([order, no]) => {
                 if (order === item) {
                     orders[item] = no + 1;
@@ -46,9 +94,10 @@ export default (state = {
                 }
             });
             if (flag === 0) orders[item] = 1;
-            const tables = { ...state.tables, [table_no]: { amt, no_of_items, orders } }
-            state = { ...state, tables }
+            const tables1 = { ...state.tables, [table_no]: { amt, no_of_items, orders } }
+            state = { ...state, tables: tables1 }
             break;
+        }
         default:
     }
     return state;

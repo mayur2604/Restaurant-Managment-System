@@ -4,26 +4,43 @@ import Box from '@material-ui/core/Box';
 import Popover from '@material-ui/core/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import { ListItem, List } from '@material-ui/core';
-
+import DeleteIcon from '@material-ui/icons/Delete';
+import TextField from '@material-ui/core/TextField';
 function dragOver(e) {
     e.preventDefault();
 }
 function onDrop(e, props) {
     props.dropItem(props.no);
 }
-
+function handleModify(e, item, props) {
+    e.preventDefault();
+    props.modifyOrder(props.no, item, e.target.value);
+}
+function handleDelete(e, item, props) {
+    e.preventDefault();
+    props.deleteOrder(props.no, item);
+}
 class Table extends React.Component {
     render() {
         const items = Object.entries(this.props.orders).map(([order, no]) => (
             <ListItem>
-                <Box px={1} mx="auto">
+                <Box px={1} mx="auto" fontSize="h6.fontSize">
                     {order}
                 </Box>
-                <Box px={1}  mx="auto">
+                <Box px={1} mx="auto" fontSize="h6.fontSize">
                     {this.props.items[order]}
                 </Box >
-                <Box px={1}  mx="auto">
-                    {no}
+                <Box px={1} mx="auto" fontSize="h6.fontSize">
+                    <TextField
+                        id="standard-number"
+                        label="Number"
+                        value={no}
+                        onChange={(e) => handleModify(e, order, this.props)}
+                        type="number"
+                    />
+                </Box>
+                <Box px={1} mx="auto">
+                    <DeleteIcon onClick={(e)=>handleDelete(e, order, this.props)} />
                 </Box>
             </ListItem>
         ));
@@ -54,7 +71,7 @@ class Table extends React.Component {
                         <Popover
                             {...bindPopover(popupState)}
                             anchorReference="anchorPosition"
-                            anchorPosition={{ top: 200, left: 400 }}
+                            anchorPosition={{ top: 200, left: 500 }}
                             anchorOrigin={{
                                 vertical: 'top',
                                 horizontal: 'left',
@@ -65,17 +82,18 @@ class Table extends React.Component {
                             }}
                         >
 
-                            <Typography>
-                                <Box px={12} mx="auto">Order Details</Box>
+                            <Box boxShadow={3} height={400} width={800} bgcolor="secondary.main" color="secondary.contrastText">
+                                <Box p={1} width={1} mx="auto" fontWeight="fontWeightBold" fontSize="h5.fontSize" >Order Details</Box>
                                 <List>
                                     <ListItem>
-                                    <Box px={2} mx="auto">NAME</Box>
-                                    <Box px={2} mx="auto">SERVINGS</Box> 
-                                    <Box px={2} mx="auto">PRICE</Box>
+                                        <Box pr={1} mx="auto" fontWeight="fontWeightMedium" fontSize="h6.fontSize">NAME</Box>
+                                        <Box pr={1} mx="auto" fontWeight="fontWeightMedium" fontSize="h6.fontSize">PRICE</Box>
+                                        <Box pr={1} mx="auto" fontWeight="fontWeightMedium" fontSize="h6.fontSize">SERVINGS</Box>
+                                        <Box pr={1} mx="auto" fontWeight="fontWeightMedium" fontSize="h6.fontSize">DELETE</Box>
                                     </ListItem>
                                     {items}
                                 </List>
-                            </Typography>
+                            </Box>
                         </Popover>
                     </div>
                 )}
