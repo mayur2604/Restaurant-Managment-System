@@ -16,7 +16,6 @@ export default (state = {
 },
     action) => {
     switch (action.type) {
-        case "addOrder": break;
         case "deleteOrder": {
             const table_no = action.table_no;
             let res;
@@ -66,9 +65,6 @@ export default (state = {
             state = { ...state, tables }
             break;
         }
-        case "addItem": { break; }
-        case "modifyItem": { break; }
-        case "deleteItem": { break; }
         case "dragItem": {
             state = { ...state, dragged_item: action.val };
             break;
