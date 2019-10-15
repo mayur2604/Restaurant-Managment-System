@@ -51,8 +51,7 @@ class Table extends React.Component {
                         <div onDragOver={(e) => { dragOver(e) }} onDrop={(e) => { onDrop(e, this.props) }} {...bindTrigger(popupState)}>
                             <Box component="div"
                                 boxShadow={3}
-                                bgcolor="primary.main"
-                                color="primary.contrastText"
+                                bgcolor="#e6e6e6"
                                 m={1}
                                 px={2}
                                 py={2}
@@ -82,7 +81,7 @@ class Table extends React.Component {
                             }}
                         >
 
-                            <Box boxShadow={3} height={400} width={800} bgcolor="secondary.main" color="secondary.contrastText">
+                            <Box boxShadow={3} height={400} width={800} bgcolor="#e6e6e6" >
                                 <Box p={1} width={1} mx="auto" fontWeight="fontWeightBold" fontSize="h5.fontSize" >Order Details</Box>
                                 <List>
                                     <ListItem>

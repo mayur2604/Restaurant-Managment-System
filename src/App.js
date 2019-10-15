@@ -5,16 +5,26 @@ import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
 import FoodItem from "./components/FoodItem";
 import { connect } from "react-redux";
-
+import Box from '@material-ui/core/Box';
 class App extends React.Component {
   render() {
     let tables = this.props.tables;
-    let items = this.props.items;
-    const food_items = Object.entries(items).map(([item, price]) => (
-      <ListItem id={item}>
-        <ListItemText><FoodItem name={item} price={price} dragItem={this.props.dragItem} /></ListItemText>
-      </ListItem>
-    ));
+    let menu = this.props.menu;
+
+    const food_categories = Object.entries(menu).map(([category, items]) => {
+
+      const food_items = items.map((item) => (
+        <ListItem id={item}>
+          <ListItemText><FoodItem name={item} price={this.props.items[item]}  dragItem={this.props.dragItem} /></ListItemText>
+        </ListItem>
+      ));
+      return (<Box >
+        <Box width={1} fontSize="h3.fontSize" mx="auto" p={1} fontFamily="Monospace">{category}</Box>
+        <Box display="flex" flexDirection="row">{food_items}</Box>
+      </Box>);
+
+
+    });
     const Tables = Object.entries(tables).map(([table_no, table_info]) => (
 
       <ListItem id={table_no}>
@@ -34,14 +44,18 @@ class App extends React.Component {
     )
     );
     return (
-      <Grid container>
-        <List  >
-          {Tables}
-        </List>
+      <Grid container direction="row" overflow="hidden">
+        <Grid p={5} m={2}>
+        <Box fontSize="h3.fontSize" mx="auto" p={1} fontFamily="Monospace">Tables</Box>
+          <List >
+            {Tables}
+          </List>
+        </Grid>
         <Divider orientation="vertical" />
-        <List>
-          {food_items}
-        </List>
+
+        <Box p={5} m={2}>
+          {food_categories}
+        </Box>
       </Grid>
     );
   }
@@ -49,13 +63,14 @@ class App extends React.Component {
 const mapStateToProps = (state) => {
   return {
     tables: state.tables,
-    items: state.items
+    items: state.items,
+    menu: state.menu
   };
 };
 const mapDispatchToProps = (dispatch) => {
   return {
-    dragItem: (item) => {
-      dispatch({ type: "dragItem", val: item });
+    dragItem: (val) => {
+      dispatch({ type: "dragItem", val });
     },
     dropItem: (table_no) => {
       dispatch({ type: "dropItem", table_no });

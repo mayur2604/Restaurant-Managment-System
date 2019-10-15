@@ -10,12 +10,11 @@ class FoodItem extends React.Component {
         return (
             <div draggable onDrag={(e) => onDrag(e, this.props)} >
                 <Box component="div" boxShadow={3}
-                    bgcolor="primary.main" color="primary.contrastText"
+                   bgcolor="#e6e6e6"
                     m={1}
-                    px={2}
-                    py={2}
+                    p={2}
                     overflow="hidden"
-                    style={{ width: '90rem', height: '6rem' }}>
+                    style={{ width: '9rem', height: '7rem' }}>
                     <Typography>
                         <Box pb={4} fontWeight="fontWeightBold" fontSize="h6.fontSize">
                             {this.props.name}
